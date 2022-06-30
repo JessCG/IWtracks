@@ -15,8 +15,8 @@ function [dk, p, wave] = IWtracks(z, H, phi, rho0, amp, period, cp, z_org, delta
 %
 % Note that deltat sets the time interval between particle position
 % estimates but is distinct from the ODE internal step size, which is set
-% to be at most 1/100th of the wave period, as the default step size was 
-% too coarse.
+% to be at most 1/10th of the wave period, as the default step size was
+% based on the time span provided (nsteps), which was too coarse. 
 %
 % Input:
 % z        = vertical vector (positive up, 0 at surface)
@@ -144,7 +144,7 @@ tspan    = [0:deltat:nsteps];
 
 % Pass event function to stop integration and set ODE internal step size
 xoverFcn = @(tp, pp) crestEventsFcn(tp,pp,x0,cp);
-opts     = odeset('MaxStep', period/100, 'Events', xoverFcn);
+opts     = odeset('MaxStep', period/10, 'Events', xoverFcn);
 
 % Solve for passive and depth-keeping particles at every depth
 for iorg = 1:npart
